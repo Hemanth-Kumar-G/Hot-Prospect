@@ -11,6 +11,9 @@
 		809964F7298DCC670082F332 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809964F6298DCC670082F332 /* ContentView.swift */; };
 		809964F9298DCC690082F332 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 809964F8298DCC690082F332 /* Assets.xcassets */; };
 		809964FC298DCC690082F332 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 809964FB298DCC690082F332 /* Preview Assets.xcassets */; };
+		80996503298DD4DE0082F332 /* ProspectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80996502298DD4DE0082F332 /* ProspectsView.swift */; };
+		80996505298DD7C90082F332 /* MeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80996504298DD7C90082F332 /* MeView.swift */; };
+		80996507298DD8750082F332 /* Prospect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80996506298DD8750082F332 /* Prospect.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +22,9 @@
 		809964F6298DCC670082F332 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		809964F8298DCC690082F332 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		809964FB298DCC690082F332 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		80996502298DD4DE0082F332 /* ProspectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProspectsView.swift; sourceTree = "<group>"; };
+		80996504298DD7C90082F332 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+		80996506298DD8750082F332 /* Prospect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prospect.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +61,9 @@
 				809964F6298DCC670082F332 /* ContentView.swift */,
 				809964F8298DCC690082F332 /* Assets.xcassets */,
 				809964FA298DCC690082F332 /* Preview Content */,
+				80996502298DD4DE0082F332 /* ProspectsView.swift */,
+				80996504298DD7C90082F332 /* MeView.swift */,
+				80996506298DD8750082F332 /* Prospect.swift */,
 			);
 			path = HotProspects;
 			sourceTree = "<group>";
@@ -137,6 +146,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80996505298DD7C90082F332 /* MeView.swift in Sources */,
+				80996507298DD8750082F332 /* Prospect.swift in Sources */,
+				80996503298DD4DE0082F332 /* ProspectsView.swift in Sources */,
 				809964F7298DCC670082F332 /* ContentView.swift in Sources */,
 				809964F5298DCC670082F332 /* HotProspectsApp.swift in Sources */,
 			);
