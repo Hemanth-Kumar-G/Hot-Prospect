@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import CodeScanner
+import UserNotifications
 
 struct ProspectsView: View {
     
@@ -17,25 +19,78 @@ struct ProspectsView: View {
     
     let filterType  : FilterType
     
+    @State private var isShowingScanner = false
+    
     var body: some View {
         NavigationView{
-            
-            Text("People : \(prospects.people.count)")
-                .navigationTitle(title)
-                .navigationBarTitleDisplayMode(.large)
-                .toolbar(content: {
-                    Button {
+            List{
+                ForEach(filteredProspects){ prospect in
+                    VStack(alignment: .leading){
                         
-                        let prosect  = Prospect()
-                        prosect.name = "Hemanth"
-                        prosect.emailAddress = "hemanthappu006@gmail.com"
-                        prospects.people.append(prosect)
+                        Text(prospect.name)
+                            .font(.headline)
+                        Text(prospect.emailAddress)
+                            .font(.headline)
                         
-                    } label: {
-                        Label("Sacn" , systemImage: "qrcode.viewfinder")
                     }
-                })
+                    .swipeActions {
+                        if prospect.isContacted {
+                            Button {
+                                prospects.toggle(prospect)
+                            } label: {
+                                Label("Mark Uncontacted", systemImage: "person.crop.circle.badge.xmark")
+                            }
+                            .tint(.blue)
+                        } else {
+                            Button {
+                                prospects.toggle(prospect)
+                            } label: {
+                                Label("Mark Contacted", systemImage: "person.crop.circle.fill.badge.checkmark")
+                            }
+                            .tint(.green)
+                            
+                            Button {
+                                addNotification(for: prospect)
+                            } label: {
+                                Label("Remind Me", systemImage: "bell")
+                            }
+                            .tint(.orange)
+                        }
+                    }
+                }
+                
+            }
+            .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar(content: {
+                Button {
+                    isShowingScanner = true
+                } label: {
+                    Label("Scan", systemImage: "qrcode.viewfinder")
+                }
+            })
+            .sheet(isPresented: $isShowingScanner, content: {
+                CodeScannerView(codeTypes: [.qr], simulatedData: "Hemanth \n hemanthappu006@gmail.com", completion: handleScan)
+            })
             
+        }
+    }
+    
+    func handleScan(result : Result<ScanResult,ScanError>) -> Void {
+        isShowingScanner = false
+        switch result {
+            
+        case .success(let result) :
+            let details = result.string.components(separatedBy: "\n")
+            guard details.count == 2 else { return }
+            
+            let person = Prospect()
+            person.name = details[0]
+            person.emailAddress = details[1]
+            prospects.add(person)
+            
+        case .failure(let error) :
+            print("Scanning failed: \(error.localizedDescription)")
         }
     }
     
@@ -49,6 +104,62 @@ struct ProspectsView: View {
             return "Uncontacted people"
         }
     }
+    
+    
+    var filteredProspects : [Prospect]{
+        switch filterType {
+        case .none :
+            return prospects.people
+            
+        case .contacted :
+            return prospects.people.filter { $0.isContacted }
+            
+        case .uncontacted :
+            return prospects.people.filter { !$0.isContacted }
+        }
+    }
+    
+    private func addNotification(for prospect:Prospect){
+        
+        let current = UNUserNotificationCenter.current()
+        
+        let addRequest = {
+            let content = UNMutableNotificationContent()
+            content.title = prospect.name
+            content.subtitle = prospect.emailAddress
+            content.sound = UNNotificationSound.default
+            
+            
+            var dateComponents = DateComponents()
+            dateComponents.hour = 9
+            //            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+            
+            current.add(request)
+        }
+        
+        current.getNotificationSettings{ settings in
+            
+            if  settings.authorizationStatus == .authorized {
+                addRequest()
+            } else  {
+                current.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                    if success {
+                        addRequest()
+                    } else {
+                        print("D'oh!")
+                    }
+                }
+            }
+            
+            
+        }
+        
+    }
+    
 }
 
 struct ProspectsView_Previews: PreviewProvider {
